@@ -13,4 +13,10 @@ def detect(string):
     doc = nlp(string)
     print(doc._.is_profane)
 
-detect(check_text)
+# detect(check_text)
+
+string = check_text
+lp = LineProfiler()
+lp_wrapper = lp(detect.__wrapped__)
+lp_wrapper(string)
+lp.print_stats()
