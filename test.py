@@ -1,0 +1,1 @@
+from profanity_detector import detect
