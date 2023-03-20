@@ -14,6 +14,7 @@ class myThread (threading.Thread):
       self.q = q
    def run(self):
       print("Starting " + self.name)
+      #call moodule condition here and module
       process_data(self.name, self.q)
       print("Exiting " + self.name)
 
@@ -28,10 +29,16 @@ def process_data(threadName, q):
         queueLock.release()
       time.sleep(1)
 
-threadList = ["Thread-1", "Thread-2", "Thread-3"]
-nameList = ["One", "Two", "Three", "Four", "Five"]
+#4 threads
+threadList = ["Thread-1", "Thread-2", "Thread-3", "Thread-4"]
+
+#*1024 later
+test_string = "small string"
+nameList = [test_string] * 5    
 queueLock = threading.Lock()
-workQueue = queue.Queue(10)
+
+#queue size will be 1024
+workQueue = queue.Queue(5)
 threads = []
 threadID = 1
 
