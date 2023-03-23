@@ -5,6 +5,7 @@ import queue
 import threading
 import time
 
+start = time.time()
 exitFlag = 0
 
 warnings.filterwarnings("ignore")
@@ -21,22 +22,22 @@ module_name = "better_profanity"
 
 class libraries(object):
     
-    @profile(precision=4)
+    # @profile(precision=4)
     def func1(self, string):        
         from better_profanity_detector import detect
         detect(string) 
     
-    @profile(precision=4)
+    # @profile(precision=4)
     def func2(self, string):
         from profanity_filter_detector import detect
         detect(string)
         
-    @profile(precision=4)
+    # @profile(precision=4)
     def func3(self, string):
         from profanityfilter_detector import detect
         detect(string)
     
-    @profile(precision=4)
+    # @profile(precision=4)
     def func4(self, string):
         from profanity_detector import detect
         detect(string)
@@ -68,6 +69,7 @@ class myThread (threading.Thread):
       process_data(self.name, self.q, self.test_string, self.module_name)
       print("Exiting " + self.name)
 
+@profile
 def process_data(threadName, q, test_string, module_name):
    while not exitFlag:
       queueLock.acquire()
@@ -128,3 +130,6 @@ exitFlag = 1
 for t in threads:
    t.join()
 print("Exiting Main Thread")
+
+stop = time.time()
+print("Time Consumed: {} secs".format(stop - start))

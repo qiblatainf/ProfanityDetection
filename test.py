@@ -1,10 +1,15 @@
 import warnings
-from memory_profiler import profile
+from memory_profiler import profile, memory_usage
 from line_profiler import LineProfiler
 import queue
 import threading
 import time
+import yappi
 
+
+
+
+start = time.time()
 exitFlag = 0
 
 warnings.filterwarnings("ignore")
@@ -15,10 +20,10 @@ check_text3 = "Profanity, often found in today's online social media, has been u
 
 test_string= "small"
 module_name = "better_profanity"
-
+requests = 5
 class libraries(object):
     
-    @profile(precision=4)
+    @profile(precision=4) #,stream = fp
     def func1(self, string):        
         from better_profanity_detector import detect
         detect(string) 
@@ -68,7 +73,7 @@ def process_data(threadName, q, test_string, module_name):
       queueLock.acquire()
       if not workQueue.empty():
         data = q.get()
-
+        print("%s processing %s on module %s" % (threadName, data, module_name))
         lib = libraries()
         if (module_name == "better_profanity"):
           lib.func1(test_string)
@@ -78,10 +83,12 @@ def process_data(threadName, q, test_string, module_name):
           lib.func3(test_string)
         elif(module_name == "profanity"):
           lib.func4(test_string)
-          
+        
+        
+        
         queueLock.release()
 
-        print("%s processing %s on module %s" % (threadName, data, module_name))
+        
       else:
         queueLock.release()
       time.sleep(1)
@@ -95,15 +102,15 @@ threadList = ["Thread-1", "Thread-2", "Thread-3", "Thread-4"]
 # nameList = [check_text1, check_text2, check_text3] 
 # test_string = small_string
 # string_size = "Small"
-nameList = [test_string] * 6
+nameList = [test_string] * requests
 queueLock = threading.Lock()
 
 #queue size will be 1024
-workQueue = queue.Queue(6)
+workQueue = queue.Queue(requests)
 threads = []
 threadID = 1
 
-# module_name = ["better_profanity", "profanity_filter", "profanityfilter", "profanity"]
+yappi.start()
 
 # Create new threads
 for tName in threadList:
@@ -129,3 +136,14 @@ exitFlag = 1
 for t in threads:
    t.join()
 print("Exiting Main Thread")
+
+yappi.stop()
+stop = time.time()
+print("Time Consumed (Latency): {} secs".format(stop - start))
+
+# retrieve thread stats by their thread id (given by yappi)
+# threads = yappi.get_thread_stats()
+# for thread in threads:
+#     print("")
+#     print("Function stats for (%s) (%d)" % (thread.name, thread.id))  # it is the Thread.__class__.__name__
+#     yappi.get_func_stats(ctx_id=thread.id).print_all()
