@@ -9,16 +9,12 @@ exitFlag = 0
 
 warnings.filterwarnings("ignore")
 check_text1 = "That wh0re gave m3 a very good H4nd j0b hehe"
-# check_text2 = "I am checking whether the translation has any offensive words. The video is absolutely trash and shit. I hate it, it is fucking annoying. fuck you. GO TO hElL, you dirty scum"
+check_text2 = "I am checking whether the translation has any offensive words. The video is absolutely trash and shit. I hate it, it is fucking annoying. fuck you. GO TO hElL, you dirty scum"
 check_text3 = "Profanity, often found in today's online social media, has been used to detect online hate speech. The aims of this study were to investigate the profanity usage on Twitter by different groups of users, and to quantify the effectiveness of using profanity in detecting hate speech. Tweets from three English-speaking countries, Australia, Malaysia, and the United States, were collected for data analysis. Statistical hypothesis tests were performed to justify the difference of profanity usage among the three countries, and a probability estimation procedure was formulated based on Bayes theorem to quantify the effectiveness of profanity-based methods in hate speech detection. Three deep learning methods, long short-term memory (LSTM), bidirectional LSTM (BLSTM), and bidirectional encoder representations from transformers (BERT) are further used to evaluate the effect of profanity screening on building classification model. Our experimental results show that the effectiveness of using profanity in detecting hate speech is questionable. Nevertheless, the results also show that for Australia tweets, where profanity is more associated with hatred, profanity-based methods in hate speech detection could be effective and profanity screening can address the class imbalance issue in hate speech detection. This is evidenced by the performances of using deep learning methods on the profanity screened data of Australia data, which achieved a classification f1-score greater than 0.84."
-small_string = check_text1
-medium_string = "B"
-large_string = "C"
-# string = check_text1
 
-#user-inputs
-# test_string = "small string"
-# module_name = "better_profanity"
+
+test_string= "small"
+module_name = "better_profanity"
 
 class libraries(object):
     
@@ -41,10 +37,7 @@ class libraries(object):
     def func4(self, string):
         from profanity_detector import detect
         detect(string)
-# def func1(test_string):        
-#         from better_profanity_detector import detect
-#         detect(test_string)
-    
+
 class myThread (threading.Thread):
    def __init__(self, threadID, name, q, test_string, module_name):
       threading.Thread.__init__(self)
@@ -57,22 +50,15 @@ class myThread (threading.Thread):
    def run(self):
       print("Starting " + self.name)
       #call moodule condition here and module
-    #   func1(self.test_string)    
-      print("Processing module: " + self.module_name)
+    #   print("Processing module: " + self.module_name)
 
-      lib = libraries()
-      if (self.module_name == "better_profanity"):
-        # print("Running better profanity on ", self.name)
-        lib.func1(test_string)
-      elif (self.module_name == "profanity_filter"):
-        # print("Running profanity_filter on ", self.name)
-        lib.func2(test_string)
-      elif(self.module_name == "profanityfilter"):
-        # print("Running profanityfilter on ", self.name)
-        lib.func3(test_string)
-      else:
-        # print("Running profanity on ", self.name)
-        lib.func4(test_string)
+      test_string = "small"
+      if (test_string == "small"):
+        self.test_string = check_text1
+      elif(test_string == "medium"):
+        self.test_string = check_text2
+      elif (test_string == "large"):
+        self.test_string = check_text3   
         
       process_data(self.name, self.q, self.test_string, self.module_name)
       print("Exiting " + self.name)
@@ -82,15 +68,16 @@ def process_data(threadName, q, test_string, module_name):
       queueLock.acquire()
       if not workQueue.empty():
         data = q.get()
-        # lib = libraries()
-        # if (module_name == "better_profanity"):
-        #   lib.func1(test_string)
-        # elif (module_name == "profanity_filter"):
-        #   lib.func2(test_string)
-        # elif(module_name == "profanityfilter"):
-        #   lib.func3(test_string)
-        # else:
-        #   lib.func4(test_string)
+
+        lib = libraries()
+        if (module_name == "better_profanity"):
+          lib.func1(test_string)
+        elif (module_name == "profanity_filter"):
+          lib.func2(test_string)
+        elif(module_name == "profanityfilter"):
+          lib.func3(test_string)
+        elif(module_name == "profanity"):
+          lib.func4(test_string)
           
         queueLock.release()
 
@@ -106,21 +93,21 @@ threadList = ["Thread-1", "Thread-2", "Thread-3", "Thread-4"]
 
 # nameList = [test_string] * 5   
 # nameList = [check_text1, check_text2, check_text3] 
-test_string = small_string
+# test_string = small_string
 # string_size = "Small"
-nameList = [test_string] * 5
+nameList = [test_string] * 6
 queueLock = threading.Lock()
 
 #queue size will be 1024
-workQueue = queue.Queue(5)
+workQueue = queue.Queue(6)
 threads = []
 threadID = 1
 
-module_name = ["better_profanity", "profanity_filter", "profanityfilter", "profanity"]
+# module_name = ["better_profanity", "profanity_filter", "profanityfilter", "profanity"]
 
 # Create new threads
 for tName in threadList:
-   thread = myThread(threadID, tName, workQueue, test_string, module_name[threadID-1])
+   thread = myThread(threadID, tName, workQueue, test_string, module_name)
    thread.start()
    threads.append(thread)
    threadID += 1
