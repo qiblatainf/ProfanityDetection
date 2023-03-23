@@ -57,30 +57,32 @@ class myThread (threading.Thread):
       # print(module_name)      
       test_string = "small"
       if (test_string == "small"):
-        test_string = check_text1
+        self.test_string = check_text1
       elif(test_string == "medium"):
-        test_string = check_text2
+        self.test_string = check_text2
       elif (test_string == "large"):
-        test_string = check_text3   
+        self.test_string = check_text3   
            
-      lib = libraries()
-      if (self.module_name == "better_profanity"):
-        lib.func1(test_string)
-      elif (self.module_name == "profanity_filter"):
-        lib.func2(test_string)
-      elif(self.module_name == "profanityfilter"):
-        lib.func3(test_string)
-      elif(self.module_name == "profanity"):
-        lib.func4(test_string)
+
         
-      process_data(self.name, self.q, self.module_name)
+      process_data(self.name, self.q, self.test_string, self.module_name)
       print("Exiting " + self.name)
 
-def process_data(threadName, q, module_name):
+def process_data(threadName, q, test_string, module_name):
    while not exitFlag:
       queueLock.acquire()
       if not workQueue.empty():
         data = q.get()
+        
+        lib = libraries()
+        if (module_name == "better_profanity"):
+          lib.func1(test_string)
+        elif (module_name == "profanity_filter"):
+          lib.func2(test_string)
+        elif(module_name == "profanityfilter"):
+          lib.func3(test_string)
+        elif(module_name == "profanity"):
+          lib.func4(test_string)
         # mod_data = module_name.get()         
         print("%s processing %s on module %s" % (threadName, data, module_name)) 
         queueLock.release()
@@ -94,23 +96,16 @@ def process_data(threadName, q, module_name):
 threadList = ["Thread-1"]
 
 #*1024 later
-
-# nameList = [test_string] * 5   
-# nameList = [check_text1, check_text2, check_text3] 
-# test_string = small_string
-# string_size = "Small"
-nameList = [test_string] * 1
+nameList = [test_string] * 5
 queueLock = threading.Lock()
 
 #queue size will be 1024
-workQueue = queue.Queue(1)
+workQueue = queue.Queue(5)
 threads = []
 threadID = 1
 
-# module_name = ["better_profanity", "profanity_filter", "profanityfilter", "profanity"]
 
 # Create new threads
-
 thread = myThread(threadID, threadList[0], workQueue, test_string, module_name)
 thread.start()
 threads.append(thread)
