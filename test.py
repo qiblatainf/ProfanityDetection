@@ -6,11 +6,10 @@ import threading
 import time
 import yappi
 
-
-
-
 start = time.time()
 exitFlag = 0
+
+yappi.set_clock_type("WALL") #can be CPU clock as well
 
 warnings.filterwarnings("ignore")
 check_text1 = "That wh0re gave m3 a very good H4nd j0b hehe"
@@ -23,22 +22,22 @@ module_name = "better_profanity"
 requests = 5
 class libraries(object):
     
-    @profile(precision=4) #,stream = fp
+    # @yappi.profile(clock_type= "wall", profile_builtins=False) #,stream = fp
     def func1(self, string):        
         from better_profanity_detector import detect
         detect(string) 
     
-    @profile(precision=4)
+    # @profile(precision=4)
     def func2(self, string):
         from profanity_filter_detector import detect
         detect(string)
         
-    @profile(precision=4)
+    # @profile(precision=4)
     def func3(self, string):
         from profanityfilter_detector import detect
         detect(string)
     
-    @profile(precision=4)
+    # @profile(precision=4)
     def func4(self, string):
         from profanity_detector import detect
         detect(string)
@@ -55,8 +54,6 @@ class myThread (threading.Thread):
    def run(self):
       print("Starting " + self.name)
       #call moodule condition here and module
-    #   print("Processing module: " + self.module_name)
-
       test_string = "small"
       if (test_string == "small"):
         self.test_string = check_text1
@@ -83,9 +80,7 @@ def process_data(threadName, q, test_string, module_name):
           lib.func3(test_string)
         elif(module_name == "profanity"):
           lib.func4(test_string)
-        
-        
-        
+          
         queueLock.release()
 
         
@@ -142,8 +137,17 @@ stop = time.time()
 print("Time Consumed (Latency): {} secs".format(stop - start))
 
 # retrieve thread stats by their thread id (given by yappi)
-# threads = yappi.get_thread_stats()
-# for thread in threads:
-#     print("")
-#     print("Function stats for (%s) (%d)" % (thread.name, thread.id))  # it is the Thread.__class__.__name__
-#     yappi.get_func_stats(ctx_id=thread.id).print_all()
+threads = yappi.get_thread_stats()
+for thread in threads:
+    print("")
+    print("Function stats for (%s) (%d)" % (thread.name, thread.id))  # it is the Thread.__class__.__name__
+    yappi.get_func_stats(ctx_id=thread.id).print_all()
+    # print("Memory usage:", yappi.get_mem_usage(thread.id))  
+
+print("Line Profiling Summary:")
+yappi.get_thread_stats().print_all()
+#ttot = total time taken by the thread
+    
+    
+
+
