@@ -1,6 +1,5 @@
 import warnings
 from memory_profiler import profile
-from line_profiler import LineProfiler
 import queue
 import threading
 import time
