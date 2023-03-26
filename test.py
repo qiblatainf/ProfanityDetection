@@ -9,8 +9,7 @@ import yappi
 start = time.time()
 exitFlag = 0
 
-# yappi.set_clock_type("WALL") #can be CPU clock as well
-yappi.set_clock_type("CPU")
+yappi.set_clock_type("CPU") #can be wall clock as well
 
 warnings.filterwarnings("ignore")
 check_text1 = "That wh0re gave m3 a very good H4nd j0b hehe"
@@ -82,9 +81,7 @@ def process_data(threadName, q, test_string, module_name):
         elif(module_name == "profanity"):
           lib.func4(test_string)
           
-        queueLock.release()
-
-        
+        queueLock.release()   
       else:
         queueLock.release()
       time.sleep(1)
@@ -95,12 +92,7 @@ if (stream == "multi thread"):
 elif (stream == "single thread"):
   threadList = ["Thread-1"]
 
-#*1024 later
-
-# nameList = [test_string] * 5   
-# nameList = [check_text1, check_text2, check_text3] 
-# test_string = small_string
-# string_size = "Small"
+#change to 1024 later
 nameList = [test_string] * requests
 queueLock = threading.Lock()
 
@@ -148,8 +140,10 @@ for thread in threads:
     yappi.get_func_stats(ctx_id=thread.id).print_all()
     # print("Memory usage:", yappi.get_mem_usage(thread.id))  
 
-print("Line Profiling Summary:")
+print("")
+print("CPU Usage:")
 yappi.get_thread_stats().print_all()
+
 #ttot = total time taken by the thread
 #scnt = thread scheduling count
     
