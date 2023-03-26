@@ -1,19 +1,23 @@
 # Single Threading Output:
-
+### Requests No = 5
 ## Yappi Results:
-Request No = 5
-&NewLine;
-![image1](./results/st.PNG)
+
+![plot](./results/st.PNG)
 
 ## Latency
-![image1](./results/lat.PNG)
+![plot](./results/lat.PNG)
+
+## CPU Clock Time
+![plot](./results/cpu_time.PNG)
 
 # Multi Threading Output:
-
+### Requests No = 5
 ## Yappi Results:
-Request No = 5
-&NewLine;
-![image1](./results/st2.PNG)
+
+![plot](./results/st2.PNG)
 
 ## Latency
-![image1](./results/lat2.PNG)
+![plot](./results/lat2.PNG)
+
+## CPU Clock Time
+![plot](./results/cpu_time2.PNG)
