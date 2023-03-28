@@ -14,3 +14,8 @@
 
 ## CPU Clock Time
 ![plot](./results/cpu_time2.PNG)
+
+#Notes
+Yappi - CPU Profiling
+Scalene - Memory Profiling
+Time API - Latency

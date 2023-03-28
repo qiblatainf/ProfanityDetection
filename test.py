@@ -5,6 +5,7 @@ import queue
 import threading
 import time
 import yappi
+# from scalene import scalene_profiler
 
 start = time.time()
 exitFlag = 0
@@ -16,13 +17,14 @@ check_text1 = "That wh0re gave m3 a very good H4nd j0b hehe"
 check_text2 = "I am checking whether the translation has any offensive words. The video is absolutely trash and shit. I hate it, it is fucking annoying. fuck you. GO TO hElL, you dirty scum"
 check_text3 = "Profanity, often found in today's online social media, has been used to detect online hate speech. The aims of this study were to investigate the profanity usage on Twitter by different groups of users, and to quantify the effectiveness of using profanity in detecting hate speech. Tweets from three English-speaking countries, Australia, Malaysia, and the United States, were collected for data analysis. Statistical hypothesis tests were performed to justify the difference of profanity usage among the three countries, and a probability estimation procedure was formulated based on Bayes theorem to quantify the effectiveness of profanity-based methods in hate speech detection. Three deep learning methods, long short-term memory (LSTM), bidirectional LSTM (BLSTM), and bidirectional encoder representations from transformers (BERT) are further used to evaluate the effect of profanity screening on building classification model. Our experimental results show that the effectiveness of using profanity in detecting hate speech is questionable. Nevertheless, the results also show that for Australia tweets, where profanity is more associated with hatred, profanity-based methods in hate speech detection could be effective and profanity screening can address the class imbalance issue in hate speech detection. This is evidenced by the performances of using deep learning methods on the profanity screened data of Australia data, which achieved a classification f1-score greater than 0.84."
 
-stream = "single thread"
+stream = "multi thread"
 test_string= "small"
 module_name = "better_profanity"
 requests = 5
 class libraries(object):
     
     # @yappi.profile(clock_type= "wall", profile_builtins=False) #,stream = fp
+    # @profile(precision= 4)
     def func1(self, string):        
         from better_profanity_detector import detect
         detect(string) 
@@ -50,7 +52,7 @@ class myThread (threading.Thread):
       self.q = q
       self.test_string = test_string
       self.module_name = module_name
-      
+   
    def run(self):
       print("Starting " + self.name)
       #call moodule condition here and module
@@ -101,6 +103,7 @@ workQueue = queue.Queue(requests)
 threads = []
 threadID = 1
 
+# scalene_profiler.start()
 yappi.start()
 
 # Create new threads
@@ -130,23 +133,31 @@ print("Exiting Main Thread")
 
 yappi.stop()
 stop = time.time()
-print("Time Consumed (Latency): {} secs".format(stop - start))
 
 # retrieve thread stats by their thread id (given by yappi)
-threads = yappi.get_thread_stats()
-for thread in threads:
-    print("")
-    print("Function stats for (%s) (%d)" % (thread.name, thread.id))  # it is the Thread.__class__.__name__
-    yappi.get_func_stats(ctx_id=thread.id).print_all()
-    # print("Memory usage:", yappi.get_mem_usage(thread.id))  
+# threads = yappi.get_thread_stats()
+# for thread in threads:
+#     print("")
+#     print("Function stats for (%s) (%d)" % (thread.name, thread.id))  # it is the Thread.__class__.__name__
+#     yappi.get_func_stats(ctx_id=thread.id).print_all()
+    
 
 print("")
+# print("Memory usage:", yappi.get_mem_usage())  
 print("CPU Usage:")
 yappi.get_thread_stats().print_all()
-
 #ttot = total time taken by the thread
 #scnt = thread scheduling count
-    
-    
 
+# calculate total memory usage
+# total_bytes = sum(stat.size for stat in snapshot.statistics('lineno'))
 
+    # convert to kb
+# total_kb = total_bytes / 1024.0
+# total_mib = total_bytes / pow(1024.0, 2)
+
+# print(total_mib)
+# tracemalloc.stop()
+# scalene_profiler.stop()
+
+print("Time Consumed (Latency): {} secs".format(stop - start))

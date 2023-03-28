@@ -62,9 +62,7 @@ class myThread (threading.Thread):
         self.test_string = check_text2
       elif (test_string == "large"):
         self.test_string = check_text3   
-           
 
-        
       process_data(self.name, self.q, self.test_string, self.module_name)
       print("Exiting " + self.name)
 
