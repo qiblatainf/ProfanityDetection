@@ -7,4 +7,5 @@ def detect(string):
     nlp.add_pipe(pf.spacy_component, last=True)
     doc = nlp(string)
     print(doc._.is_profane)
+    
 

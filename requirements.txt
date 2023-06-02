@@ -1,0 +1,11 @@
+better_profanity==0.7.0
+detoxify==0.5.1
+line_profiler==4.0.3
+memory_profiler==0.61.0
+profanity==1.1
+profanity_check==1.0.3
+profanity_filter==1.3.3
+profanityfilter==2.0.6
+spacy==2.3.9
+spacy==3.5.2
+yappi==1.4.0
